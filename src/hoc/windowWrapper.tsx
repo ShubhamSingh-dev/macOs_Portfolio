@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useEffect } from "react";
 import useWindowStore from "../store/window";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -24,19 +24,43 @@ const windowWrapper = (
 
     const { isOpen, zIndex } = window;
     const ref = useRef<HTMLElement>(null);
+    const draggableRef = useRef<Draggable[]>([]);
 
-    useGSAP(() => {
+    // Handle draggable creation and cleanup
+    useEffect(() => {
       const el = ref.current;
-      if (!el) return;
+      if (!el || !isOpen) return;
 
-      const [instance] = Draggable.create(el, {
-        onPress: () => focusWindow(windowKey),
+      // Kill any existing draggable instances
+      if (draggableRef.current.length > 0) {
+        draggableRef.current.forEach((instance) => instance.kill());
+        draggableRef.current = [];
+      }
+
+      // Create new draggable instance
+      const instance = Draggable.create(el, {
+        trigger: el.querySelector("#window-header"), // Only drag from header
+        bounds: "body",
+        onPress: function () {
+          focusWindow(windowKey);
+        },
+        onDrag: function () {
+          // Ensure window stays focused while dragging
+          focusWindow(windowKey);
+        },
       });
-      return () => {
-        instance.kill();
-      };
-    }, []);
 
+      draggableRef.current = instance;
+
+      return () => {
+        if (draggableRef.current.length > 0) {
+          draggableRef.current.forEach((inst) => inst.kill());
+          draggableRef.current = [];
+        }
+      };
+    }, [isOpen, focusWindow, windowKey]);
+
+    // Handle open animation
     useGSAP(() => {
       const el = ref.current;
       if (!el || !isOpen) return;
