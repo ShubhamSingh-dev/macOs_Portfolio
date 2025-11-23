@@ -32,14 +32,31 @@ const Finder = () => {
       </li>
     ));
 
-  const openItem = (item: any) => {
-    if (item.fileType === "pdf") return openWindow("resume");
-    if (item.kind === "folder") return setActiveLocation(item);
-    if (["fig", "url"].includes(item.fileType) && item.href)
-      return window.open(item.href, "_blank");
+  const openItem = (item: any, event: React.MouseEvent) => {
+    // Prevent event from bubbling to Finder's onClick (which would focus Finder)
+    event.stopPropagation();
 
-    openWindow(`${item.fileType}${item.kind}`, item);
+    if (item.fileType === "pdf") {
+      openWindow("resume");
+      return;
+    }
+
+    if (item.kind === "folder") {
+      setActiveLocation(item);
+      return;
+    }
+
+    if (["fig", "url"].includes(item.fileType) && item.href) {
+      window.open(item.href, "_blank");
+      return;
+    }
+
+    // Open txt or img files with fresh z-index
+    const windowKey = `${item.fileType}${item.kind}`;
+    console.log(`Opening ${windowKey} for ${item.name}`);
+    openWindow(windowKey, item);
   };
+
   return (
     <>
       <div id="window-header">
@@ -64,7 +81,7 @@ const Finder = () => {
             <li
               key={item.id}
               className={item.position}
-              onClick={() => openItem(item)}
+              onClick={(e) => openItem(item, e)}
             >
               <img src={item.icon} alt={item.name} />
               <p>{item.name}</p>

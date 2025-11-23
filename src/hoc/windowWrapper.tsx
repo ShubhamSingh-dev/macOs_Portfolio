@@ -25,6 +25,7 @@ const windowWrapper = (
     const { isOpen, zIndex } = window;
     const ref = useRef<HTMLElement>(null);
     const draggableRef = useRef<Draggable[]>([]);
+    const prevDataRef = useRef(window.data);
 
     // Handle draggable creation and cleanup
     useEffect(() => {
@@ -60,10 +61,13 @@ const windowWrapper = (
       };
     }, [isOpen, focusWindow, windowKey]);
 
-    // Handle open animation
+    // Handle open animation - trigger when data changes or window opens
     useGSAP(() => {
       const el = ref.current;
       if (!el || !isOpen) return;
+
+      // Update the ref to track data changes
+      prevDataRef.current = window.data;
 
       el.style.display = "block";
 
@@ -82,7 +86,7 @@ const windowWrapper = (
           ease: "power3.out",
         }
       );
-    }, [isOpen]);
+    }, [isOpen, window.data]);
 
     useLayoutEffect(() => {
       const el = ref.current;

@@ -25,10 +25,12 @@ const useWindowStore = create<WindowState>()(
       set((state) => {
         const win = state.windows[windowKey];
         if (win) {
+          // Always assign a fresh z-index when opening
+          const newZIndex = state.nextZIndex++;
           win.isOpen = true;
-          win.zIndex = state.nextZIndex;
+          win.zIndex = newZIndex;
           win.data = data;
-          state.nextZIndex++;
+          console.log(`Opening ${windowKey} with z-index: ${newZIndex}`);
         }
       }),
     closeWindow: (windowKey) =>
