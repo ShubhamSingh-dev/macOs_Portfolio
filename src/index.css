@@ -236,14 +236,16 @@ body {
     }
   }
 
+  /* Replace the #photos section in your src/index.css (around line 271) with this: */
+
   #photos {
-    @apply max-w-3xl absolute top-96 left-1/2 -translate-y-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply max-w-3xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden max-h-[75vh];
 
     .sidebar {
       @apply w-3/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-5;
 
-      h2 {
-        @apply text-xs font-medium text-gray-400 mb-1;
+      h3 {
+        @apply  font-medium text-gray-400 mb-1;
       }
 
       ul {
