@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-georama: "Georama", sans-serif;
+  --font-roboto: "Roboto Mono", monospace;
+  --breakpoint-3xl: 1920px;
+}
+
+@layer base {
+  html,
+  body {
+    @apply w-dvw h-dvh overflow-hidden;
+    background-image: url("/images/wallpaper.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+  }
+
+  html.dark body {
+    background-image: url("/images/wallpaper.jpg");
+  }
+
+  main {
+    @apply w-dvw h-dvh overflow-hidden;
+  }
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility col-center {
+  @apply flex flex-col items-center justify-center;
+}
+
+@utility abs-center {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+/* Glassmorphism Utilities */
+@utility glass {
+  @apply bg-white/70 dark:bg-black/60 backdrop-blur-[40px] saturate-150;
+}
+
+@utility glass-window {
+  @apply bg-white/98 dark:bg-[#1e1e1e]/97 backdrop-blur-[40px] saturate-150 border border-white/40 dark:border-neutral-500/60 shadow-2xl;
+}

@@ -1,11 +1,10 @@
-import { Search } from "lucide-react";
-import { WindowControls } from "../components";
-import windowWrapper from "../hoc/windowWrapper";
-import useLocationStore from "../store/location";
-import { locations } from "../constants";
+import { } from "lucide-react";
+import WindowFrame from "../WindowFrame";
+import useLocationStore from "../../../store/location";
+import useWindowStore from "../../../store/window";
+import { locations } from "../../../constants";
 import clsx from "clsx";
 import type { JSX } from "react";
-import useWindowStore from "../store/window";
 
 const Finder = () => {
   const { activeLocation, setActiveLocation } = useLocationStore();
@@ -36,7 +35,6 @@ const Finder = () => {
     ));
 
   const openItem = (item: any, event: React.MouseEvent) => {
-    // Prevent event from bubbling to Finder's onClick (which would focus Finder)
     event.stopPropagation();
 
     if (item.fileType === "pdf") {
@@ -54,21 +52,15 @@ const Finder = () => {
       return;
     }
 
-    // Open txt or img files with fresh z-index
     const windowKey = `${item.fileType}${item.kind}`;
-    console.log(`Opening ${windowKey} for ${item.name}`);
     openWindow(windowKey, item);
   };
 
   return (
-    <>
-      <div id="window-header">
-        <WindowControls target="finder" />
-        <Search className="icon" />
-      </div>
-
-      <div className="bg-white dark:bg-[#1e1e1e] flex h-full">
-        <div className="w-48 bg-gray-50 dark:bg-[#252525] border-r border-gray-200 dark:border-gray-700 flex flex-col p-5 space-y-3">
+    <WindowFrame id="finder" title="Finder" defaultWidth={800} defaultHeight={500}>
+      <div className="flex h-full">
+        {/* Sidebar */}
+        <div className="w-48 bg-gray-50/50 dark:bg-[#252525]/50 border-r border-gray-200 dark:border-gray-700 flex flex-col p-5 space-y-3 backdrop-blur-sm">
           <div>
             <h3 className="text-xs font-medium text-gray-400 mb-1">Favorites</h3>
             <ul className="space-y-1">{renderList(Object.values(locations))}</ul>
@@ -79,23 +71,30 @@ const Finder = () => {
           </div>
         </div>
 
-        <ul className="flex-1 p-8 bg-white dark:bg-[#1e1e1e] max-w-2xl relative">
-          {activeLocation?.children.map((item) => (
-            <li
-              key={item.id}
-              className={`absolute flex items-center flex-col gap-3 ${item.position}`}
-              onClick={(e) => openItem(item, e)}
-            >
-              <img src={item.icon} alt={item.name} className="object-contain object-center size-16 relative group-hover:scale-105 transition-transform" />
-              <p className="text-sm text-center font-medium w-40 text-gray-800 dark:text-gray-200">{item.name}</p>
-            </li>
-          ))}
-        </ul>
+        {/* Content */}
+        <div className="flex-1 p-8 bg-white dark:bg-[#1e1e1e] relative overflow-y-auto">
+          <ul className="grid grid-cols-4 gap-4">
+            {activeLocation?.children.map((item) => (
+              <li
+                key={item.id}
+                className="flex flex-col items-center gap-2 group cursor-pointer p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                onClick={(e) => openItem(item, e)}
+              >
+                <img 
+                  src={item.icon} 
+                  alt={item.name} 
+                  className="w-16 h-16 object-contain group-hover:scale-105 transition-transform" 
+                />
+                <p className="text-sm text-center font-medium text-gray-800 dark:text-gray-200 break-words w-full">
+                  {item.name}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </>
+    </WindowFrame>
   );
 };
 
-const finderWindow = windowWrapper(Finder, "finder");
-
-export default finderWindow;
+export default Finder;

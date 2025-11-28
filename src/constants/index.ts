@@ -1,4 +1,4 @@
-const navLinks = [
+export const navLinks = [
   {
     id: 1,
     name: "Projects",
@@ -16,7 +16,7 @@ const navLinks = [
   },
 ];
 
-const navIcons = [
+export const navIcons = [
   {
     id: 1,
     img: "/icons/wifi.svg",
@@ -35,7 +35,7 @@ const navIcons = [
   },
 ];
 
-const dockApps = [
+export const dockApps = [
   {
     id: "finder",
     name: "Portfolio", // was "Finder"
@@ -74,7 +74,7 @@ const dockApps = [
   },
 ];
 
-const blogPosts = [
+export const blogPosts = [
   {
     id: 1,
     date: "Sep 2, 2025",
@@ -99,7 +99,7 @@ const blogPosts = [
   },
 ];
 
-const techStack = [
+export const techStack = [
   {
     category: "Frontend",
     items: ["React.js", "Next.js", "TypeScript"],
@@ -126,7 +126,7 @@ const techStack = [
   },
 ];
 
-const socials = [
+export const socials = [
   {
     id: 1,
     text: "Github",
@@ -157,7 +157,7 @@ const socials = [
   },
 ];
 
-const photosLinks = [
+export const photosLinks = [
   {
     id: 1,
     icon: "/icons/gicon1.svg",
@@ -185,7 +185,7 @@ const photosLinks = [
   },
 ];
 
-const gallery = [
+export const gallery = [
   {
     id: 1,
     img: "/images/gal1.png",
@@ -203,17 +203,6 @@ const gallery = [
     img: "/images/gal4.png",
   },
 ];
-
-export {
-  navLinks,
-  navIcons,
-  dockApps,
-  blogPosts,
-  techStack,
-  socials,
-  photosLinks,
-  gallery,
-};
 
 const WORK_LOCATION = {
   id: 1,
@@ -490,18 +479,17 @@ export const locations = {
   trash: TRASH_LOCATION,
 };
 
-const INITIAL_Z_INDEX = 1000;
+export const INITIAL_Z_INDEX = 1000;
 
-const WINDOW_CONFIG = {
-  finder: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  safari: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  system: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+export const WINDOW_CONFIG = {
+  finder: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  safari: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
+  system: { isOpen: false, zIndex: INITIAL_Z_INDEX, isMinimized: false, isMaximized: false, data: null },
 };
 
-export { INITIAL_Z_INDEX, WINDOW_CONFIG };
