@@ -71,21 +71,55 @@ const windowWrapper = (
 
       el.style.display = "block";
 
-      gsap.fromTo(
-        el,
-        {
-          scale: 0.8,
-          opacity: 0,
-          y: 40,
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          y: 0,
-          duration: 0.3,
-          ease: "power3.out",
-        }
-      );
+      // Find origin element (dock icon)
+      const dockIcon = document.querySelector(`[data-dock-id="${windowKey}"]`);
+      const origin = dockIcon?.getBoundingClientRect();
+
+      if (origin) {
+        const { left, top, width, height } = origin;
+        const x = left + width / 2;
+        const y = top + height / 2;
+        
+        // Get window center
+        const winRect = el.getBoundingClientRect();
+        const winX = winRect.left + winRect.width / 2;
+        const winY = winRect.top + winRect.height / 2;
+
+        gsap.fromTo(
+          el,
+          {
+            x: x - winX,
+            y: y - winY,
+            scale: 0,
+            opacity: 0,
+          },
+          {
+            x: 0,
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.75)",
+          }
+        );
+      } else {
+        // Fallback animation
+        gsap.fromTo(
+          el,
+          {
+            scale: 0.8,
+            opacity: 0,
+            y: 40,
+          },
+          {
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            duration: 0.3,
+            ease: "power3.out",
+          }
+        );
+      }
     }, [isOpen, window.data]);
 
     useLayoutEffect(() => {
@@ -93,7 +127,9 @@ const windowWrapper = (
       if (!el) return;
 
       el.style.display = isOpen ? "block" : "none";
-    }, [isOpen]);
+      // Set z-index via CSS variable directly on the element
+      el.style.setProperty("--window-z-index", zIndex.toString());
+    }, [isOpen, zIndex]);
 
     // Don't render if window is not open
     if (!isOpen) return null;
@@ -106,9 +142,8 @@ const windowWrapper = (
       <section
         id={windowKey}
         ref={ref}
-        style={{ zIndex }}
         onClick={handleClick}
-        className="absolute"
+        className="window-wrapper"
       >
         <Component {...props} />
       </section>

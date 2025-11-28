@@ -83,11 +83,12 @@ const Dock = () => {
     <section id="dock">
       <div ref={dockRef} className="dock-container">
         {dockApps.map(({ id, name, icon, canOpen }) => (
-          <div key={id} className="relative flex justify-center">
+          <div key={id} className="relative flex justify-center group">
             <button
               className="dock-icon"
               type="button"
               aria-label={name}
+              data-dock-id={id}
               data-tooltip-id="dock-tooltip"
               data-tooltip-content={name}
               data-tooltip-delay-show={150}
@@ -101,6 +102,9 @@ const Dock = () => {
                 className={canOpen ? "" : "opacity-60"}
               />
             </button>
+            {windows[id]?.isOpen && (
+              <div className="absolute -bottom-1 w-1 h-1 bg-gray-500 rounded-full" />
+            )}
           </div>
         ))}
         <Tooltip id="dock-tooltip" place="top" className="tooltip" />

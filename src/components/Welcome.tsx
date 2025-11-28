@@ -12,7 +12,11 @@ const renderText = (text: string, className: string, baseWeight = 400) => {
     <span
       key={index}
       className={className}
-      style={{ fontVariationSettings: `wght ${baseWeight}` }}
+      ref={(el) => {
+        if (el) {
+          el.style.fontVariationSettings = `'wght' ${baseWeight}`;
+        }
+      }}
     >
       {char === " " ? "\u00A0" : char}
     </span>
