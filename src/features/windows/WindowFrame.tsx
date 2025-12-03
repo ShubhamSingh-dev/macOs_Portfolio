@@ -29,11 +29,14 @@ const WindowFrame = ({
   const ref = useRef<HTMLElement>(null);
   const draggableRef = useRef<Draggable[]>([]);
 
-  if (!windowState?.isOpen) return null;
-
-  const { zIndex, isMinimized, isMaximized } = windowState;
+  // Safe defaults to ensure hooks always run with valid values
+  const zIndex = windowState?.zIndex ?? 0;
+  const isMinimized = windowState?.isMinimized ?? false;
+  const isMaximized = windowState?.isMaximized ?? false;
+  const isOpen = windowState?.isOpen ?? false;
 
   useEffect(() => {
+    if (!isOpen) return;
     const el = ref.current;
     if (!el) return;
 
@@ -54,9 +57,10 @@ const WindowFrame = ({
     return () => {
       instance.forEach(d => d.kill());
     };
-  }, [id, focusWindow]);
+  }, [id, focusWindow, isOpen]);
 
   useGSAP(() => {
+    if (!isOpen) return;
     const el = ref.current;
     if (!el) return;
 
@@ -74,7 +78,7 @@ const WindowFrame = ({
     } else {
       el.style.display = "block";
       gsap.to(el, {
-        scale: isMaximized ? 1 : 1, // Logic for maximize could be added here
+        scale: isMaximized ? 1 : 1,
         opacity: 1,
         y: 0,
         width: isMaximized ? "100vw" : defaultWidth,
@@ -85,10 +89,11 @@ const WindowFrame = ({
         ease: "power2.out",
       });
     }
-  }, [isMinimized, isMaximized]);
+  }, [isMinimized, isMaximized, isOpen]);
 
   // Initial open animation
   useGSAP(() => {
+    if (!isOpen) return;
     const el = ref.current;
     if (!el) return;
 
@@ -96,19 +101,25 @@ const WindowFrame = ({
       { scale: 0.8, opacity: 0, y: 20 },
       { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.2)" }
     );
-  }, []);
+  }, [isOpen]);
+
+  if (!isOpen) return null;
 
   return (
     <section
-  ref={ref}
-  className={`absolute glass-window rounded-xl overflow-hidden flex flex-col
-    top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-    ${className}
-    w-[${defaultWidth}] h-[${defaultHeight}] z-[${zIndex}]
-  `}
-  onMouseDown={() => focusWindow(id)}
->
-
+      ref={ref}
+      className={`absolute glass-window rounded-xl overflow-hidden flex flex-col ${className}`}
+      style={{ 
+        zIndex,
+        width: defaultWidth,
+        height: defaultHeight,
+        // Center initially if no position stored
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)" 
+      }}
+      onMouseDown={() => focusWindow(id)}
+    >
       {/* Header */}
       <div className="window-header flex items-center justify-between px-4 py-3 bg-gray-100/50 dark:bg-gray-800/50 border-b border-gray-200/50 dark:border-gray-700/50 backdrop-blur-md select-none">
         <WindowControls windowId={id} />

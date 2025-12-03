@@ -85,7 +85,7 @@ const Finder = () => {
                   alt={item.name} 
                   className="w-16 h-16 object-contain group-hover:scale-105 transition-transform" 
                 />
-                <p className="text-sm text-center font-medium text-gray-800 dark:text-gray-200 break-words w-full">
+                <p className="text-sm text-center font-medium text-gray-800 dark:text-gray-200 wrap-break-word w-full">
                   {item.name}
                 </p>
               </li>
